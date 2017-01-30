@@ -42,7 +42,6 @@ void setup() {
     allMotorsSetSpeed(160);
 
     allMotorsRun(FORWARD);
-
     // delay(2000);
     // allMotorsRun(BACKWARD);
     // delay(2000);
