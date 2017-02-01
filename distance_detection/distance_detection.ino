@@ -24,6 +24,8 @@ unsigned long interrupt_rising_edge;
 
 bool flip = 0;
 
+motor_modes_t current_mode = OFF_OFF;
+
 NewPing sonar[SONAR_NUM] = {     // Sensor object array.
   NewPing(SENSOR_L_TRIG, SENSOR_L_ECHO, SENSOR_L_MAX_DIST), // Each sensor's trigger pin, echo pin, and max distance to ping.
   // NewPing(SENSOR_M_TRIG, SENSOR_M_ECHO, SENSOR_M_MAX_DIST),
@@ -47,12 +49,16 @@ void loop() {
 
       if (i == 0 && currentSensor == SONAR_NUM - 1)
       {
-        oneSensorCycle(); // Sensor ping cycle complete, do something with the results.
+        // oneSensorCycle(); // Sensor ping cycle complete, do something with the results.
 
-        data_send(distToMotorModeConversion(cm[0],cm[1]));
+        if (current_mode != distToMotorModeConversion(cm[0],cm[1]))
+        {
+            current_mode = distToMotorModeConversion(cm[0],cm[1]);
+            data_send(current_mode);
 
-        data_rdy_int_high(); // Send the data and pull the interrupt high so the motor arduino knows the send has completed
-        interrupt_rising_edge = millis();
+            data_rdy_int_high(); // Send the data and pull the interrupt high so the motor arduino knows the send has completed
+            interrupt_rising_edge = millis();
+        }
       }
 
       sonar[currentSensor].timer_stop();          // Make sure previous timer is canceled before starting a new ping (insurance).
@@ -72,67 +78,67 @@ void loop() {
 
 motor_modes_t distToMotorModeConversion(unsigned int leftDist, unsigned int rightDist)
 {
-    motor_modes_t motorCommand;
+    motor_modes_t motor_command;
 
     //Too far away
     if ((leftDist == 255) & (rightDist == 255) )
     {
-        motorCommand = OFF_OFF;
-        Serial.println("OFF_OFF");
+        motor_command = OFF_OFF;
+        // Serial.println("OFF_OFF");
     }
     else if ((leftDist <= HALF_THRESHOLD) && (leftDist > FULL_THRESHOLD) && (rightDist == 255))
     {
-        motorCommand = HALF_OFF;
-        Serial.println("HALF_OFF");
+        motor_command = HALF_OFF;
+        // Serial.println("HALF_OFF");
 
     }
     else if ((rightDist <= HALF_THRESHOLD) && (rightDist > FULL_THRESHOLD) && (leftDist == 255))
     {
-        motorCommand = OFF_HALF;
-        Serial.println("OFF_HALF");
+        motor_command = OFF_HALF;
+        // Serial.println("OFF_HALF");
 
     }
     else if ((rightDist <= HALF_THRESHOLD) && (rightDist > FULL_THRESHOLD) && (leftDist <= HALF_THRESHOLD) && (leftDist > FULL_THRESHOLD))
     {
-        motorCommand = HALF_HALF;
-        Serial.println("HALF_HALF");
+        motor_command = HALF_HALF;
+        // Serial.println("HALF_HALF");
 
     }
 
     //Below: SHOULD BE FULL_OFF and OFF_FULL
     else if ((leftDist <= FULL_THRESHOLD) && (rightDist == 255))
     {
-        motorCommand = FULL_HALF;
-        Serial.println("FULL_HALF");
+        motor_command = FULL_HALF;
+        // Serial.println("FULL_HALF");
 
     }
     else if ((rightDist <= FULL_THRESHOLD) && (leftDist == 255))
     {
-        motorCommand = HALF_OFF;
-        Serial.println("FULL_HALF");
+        motor_command = HALF_FULL;
+        // Serial.println("HALF_FULL");
 
     }
     //End
 
     else if ((leftDist <= FULL_THRESHOLD) && (rightDist <= HALF_THRESHOLD) && (rightDist >= FULL_THRESHOLD))
     {
-        motorCommand = FULL_HALF;
-        Serial.println("FULL_HALF");
+        motor_command = FULL_HALF;
+        // Serial.println("FULL_HALF");
 
     }
     else if ((rightDist <= FULL_THRESHOLD) && (leftDist <= HALF_THRESHOLD) && (leftDist >= FULL_THRESHOLD))
     {
-        motorCommand = HALF_FULL;
-        Serial.println("HALF_FULL");
+        motor_command = HALF_FULL;
+        // Serial.println("HALF_FULL");
 
     }
     else if (leftDist <= FULL_THRESHOLD && rightDist <= FULL_THRESHOLD)
     {
-        motorCommand = FULL_FULL;
-        Serial.println("FULL_FULL");
+        motor_command = FULL_FULL;
+        // Serial.println("FULL_FULL");
     }
 
-    data_send(motorCommand);
+    return motor_command;
 }
 
 void echoCheck() { // If ping received, set the sensor distance to array.
