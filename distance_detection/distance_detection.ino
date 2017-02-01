@@ -45,7 +45,7 @@ void setup() {
 void loop() {
   for (uint8_t i = 0; i < SONAR_NUM; i++) { // Loop through all the sensors.
     if (millis() >= pingTimer[i]) {         // Is it this sensor's time to ping?
-      pingTimer[i] += PING_INTERVAL * SONAR_NUM;  // Set next time this sensor will be pinged.
+      pingTimer[i] += PING_INTERVAL * SONAR_NUM ;  // Set next time this sensor will be pinged.
 
       if (i == 0 && currentSensor == SONAR_NUM - 1)
       {
@@ -105,7 +105,7 @@ motor_modes_t distToMotorModeConversion(unsigned int leftDist, unsigned int righ
 
     }
 
-    //Below: SHOULD BE FULL_OFF and OFF_FULL
+    //TODO Below: SHOULD BE FULL_OFF and OFF_FULL
     else if ((leftDist <= FULL_THRESHOLD) && (rightDist == 255))
     {
         motor_command = FULL_HALF;

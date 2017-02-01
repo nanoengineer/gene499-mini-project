@@ -5,6 +5,7 @@
 #define MAX_DISTANCE  (100) // Maximum distance (in cm) to ping.
 #define PING_INTERVAL (40)  // Milliseconds between sensor pings (29ms is about the min to avoid cross-sensor echo).
 
+#define CYCLE_PERIOD  (200)
 
 #define SENSOR_L_MAX_DIST 	(MAX_DISTANCE)
 #define SENSOR_M_MAX_DIST 	(MAX_DISTANCE)

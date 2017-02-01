@@ -8,7 +8,7 @@
 #define BIT_1_PIN (A2)
 #define BIT_2_PIN (A3)
 
-#define INTERRUPT_LENGTH (50) //in ms
+#define INTERRUPT_LENGTH (25) //in ms
 
 void data_init(void);
 

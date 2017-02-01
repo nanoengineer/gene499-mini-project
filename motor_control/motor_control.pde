@@ -3,92 +3,103 @@
 // this code is public jacky, enjoy!
 
 #include <MSMotorShield.h>
+#include "motor_modes.h"
+#include "data_rcv.h"
 
 #define MOTOR_TEST (1)
 
 //Motor rumble intensities
-#define RUMBLE_INTENSITY_LOW    (50)
-#define RUMBLE_INTENSITY_MED    (100)
-#define RUMBLE_INTENSITY_HIGH   (200)
+#define RUMBLE_INTENSITY_HALF   (80)
+#define RUMBLE_INTENSITY_FULL   (100)
 
-#define NUM_OF_MOTORS            (4)
+#define NUM_OF_MOTORS            (2)
 
 /* USE MOTORS 1 and 2 for high frequency PWM */
-
-//Instantiate Motor Classes
-// MS_DCMotor motor4(4); //Create a motor instance, connected to port 4
-// MS_DCMotor motor3(3); //Create a motor instance, connected to port 3
-// MS_DCMotor motor2(2); //Create a motor instance, connected to port 2
-// MS_DCMotor motor1(1); //Create a motor instance, connected to port 1
-
 
 MS_DCMotor rumbleMotor[NUM_OF_MOTORS] =
 {
   MS_DCMotor(1),
   MS_DCMotor(2),
-  MS_DCMotor(3),
-  MS_DCMotor(4)
 };
 
+motor_modes_t motor_cmd = OFF_OFF;
+bool data_was_read = false;
+
 void setup() {
-  Serial.begin(9600);           // set up Serial library at 9600 bps
+  Serial.begin(115200);           // set up Serial library at 115200 bps
   Serial.println("Motor test!");
 
-  setPwmFrequencyUNO(3,1);  //32.37 KHz
+  setPwmFrequencyUNO(3,1);  //32.37 KHz for driving Motor 1 and Motor 2, reduce whine
   setPwmFrequencyUNO(11,1);
+
+  data_rcv_init();
 
   // turn on motor
   #ifdef MOTOR_TEST
-    allMotorsSetSpeed(160);
-
+    allMotorsSetSpeed(RUMBLE_INTENSITY_HALF);
     allMotorsRun(FORWARD);
-    // delay(2000);
-    // allMotorsRun(BACKWARD);
-    // delay(2000);
-    // allMotorsRun(BRAKE);
+    delay(4000);
+    allMotorsSetSpeed(RUMBLE_INTENSITY_FULL);
+    allMotorsRun(FORWARD);
+    delay(4000);
   #endif
 }
 
 void loop() {
+    if(data_is_rdy() && !data_was_read)
+    {
+      motor_cmd = data_read();
+      switch (motor_cmd)
+      {
+          case OFF_OFF:
+            allMotorsSetSpeed(0);
+            allMotorsRun(BRAKE);
+            Serial.println("OFF_OFF");
+            break;
+          case OFF_HALF:
+            rumbleMotor[1].setSpeed(RUMBLE_INTENSITY_HALF);
+            rumbleMotor[0].setSpeed(0);
+            rumbleMotor[1].run(FORWARD);
+            rumbleMotor[0].run(BRAKE);
+            Serial.println("OFF_HALF");
+            break;
+          case HALF_OFF:
+            rumbleMotor[0].setSpeed(RUMBLE_INTENSITY_HALF);
+            rumbleMotor[1].setSpeed(0);
+            rumbleMotor[0].run(FORWARD);
+            rumbleMotor[1].run(BRAKE);
+            Serial.println("HALF_OFF");
+            break;
+          case HALF_HALF:
+            allMotorsSetSpeed(RUMBLE_INTENSITY_HALF);
+            allMotorsRun(FORWARD);
+            Serial.println("HALF_HALF");
+            break;
+          case HALF_FULL:
+            rumbleMotor[0].setSpeed(RUMBLE_INTENSITY_HALF);
+            rumbleMotor[1].setSpeed(RUMBLE_INTENSITY_FULL);
+            allMotorsRun(FORWARD);
+            Serial.println("HALF_FULL");
+            break;
+          case FULL_HALF:
+            rumbleMotor[1].setSpeed(RUMBLE_INTENSITY_HALF);
+            rumbleMotor[0].setSpeed(RUMBLE_INTENSITY_FULL);
+            allMotorsRun(FORWARD);
+            Serial.println("FULL_HALF");
+            break;
+          case FULL_FULL:
+            allMotorsSetSpeed(RUMBLE_INTENSITY_FULL);
+            allMotorsRun(FORWARD);
+            Serial.println("FULL_FULL");
+            break;
+      }
+      data_was_read = true;
+    }
+    else if (!data_is_rdy() && data_was_read)
+    {
+      data_was_read = false;
+    }
 
-  allMotorsSetSpeed(160);
-  allMotorsRun(FORWARD);
-  delay(1000);
-  allMotorsSetSpeed(160);
-  allMotorsRun(BACKWARD);
-  delay(500);
- //  uint8_t i;
- //
- //  Serial.print("tick");
- //
- //  motor.run(FORWARD);
- //  for (i=0; i<255; i++) {
- //    motor.setSpeed(i);
- //    delay(10);
- // }
- //
- //  for (i=255; i!=0; i--) {
- //    motor.setSpeed(i);
- //    delay(10);
- // }
- //
- //  Serial.print("tock");
- //
- //  motor.run(BACKWARD);
- //  for (i=0; i<255; i++) {
- //    motor.setSpeed(i);
- //    delay(10);
- // }
- //
- //  for (i=255; i!=0; i--) {
- //    motor.setSpeed(i);
- //    delay(10);
- // }
- //
- //
- //  Serial.print("tech");
- //  motor.run(RELEASE);
- //  delay(1000);
 }
 
 
