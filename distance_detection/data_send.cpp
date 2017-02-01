@@ -15,12 +15,12 @@ void data_init(void)
   digitalWrite(INT_PIN, LOW);
 }
 
-void data_interrupt_high(void)
+void data_rdy_int_high(void)
 {
   digitalWrite(INT_PIN, HIGH);
 }
 
-void data_interrupt_low(void)
+void data_rdy_int_low(void)
 {
   digitalWrite(INT_PIN, LOW);
 }
