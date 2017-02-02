@@ -10,8 +10,8 @@
 // #define MOTOR_TEST
 
 //Motor rumble intensities
-#define RUMBLE_INTENSITY_HALF   (80)
-#define RUMBLE_INTENSITY_FULL   (150)
+#define RUMBLE_INTENSITY_HALF   (110)
+#define RUMBLE_INTENSITY_FULL   (200)
 
 #define NUM_OF_MOTORS            (2)
 
@@ -71,10 +71,10 @@ void setup() {
   #ifdef MOTOR_TEST
     allMotorsSetSpeed(RUMBLE_INTENSITY_HALF);
     allMotorsRun(FORWARD);
-    delay(4000);
+    delay(1000);
     allMotorsSetSpeed(RUMBLE_INTENSITY_FULL);
     allMotorsRun(FORWARD);
-    delay(4000);
+    delay(1000);
   #endif
 }
 
@@ -282,38 +282,38 @@ void loop() {
 
 void leftMotorFullSpikeHigh()
 {
-  motorRumble(1,RUMBLE_INTENSITY_FULL);
+  motorRumble(0,RUMBLE_INTENSITY_FULL);
   Serial.println("L_FULL");
 }
 
 void leftMotorHalfSpikeHigh()
 {
-  motorRumble(1,RUMBLE_INTENSITY_HALF);
+  motorRumble(0,RUMBLE_INTENSITY_HALF);
   Serial.println("L_HALF");
 
 }
 
 void leftMotorSpikeLow()
 {
-  motorRumble(1,0);
+  motorRumble(0,0);
   Serial.println("L_OFF");
 }
 
 void rightMotorFullSpikeHigh()
 {
-  motorRumble(2,RUMBLE_INTENSITY_FULL);
+  motorRumble(1,RUMBLE_INTENSITY_FULL);
   Serial.println("R_FULL");
 }
 
 void rightMotorHalfSpikeHigh()
 {
-  motorRumble(2,RUMBLE_INTENSITY_HALF);
+  motorRumble(1,RUMBLE_INTENSITY_HALF);
   Serial.println("R_HALF");
 }
 
 void rightMotorSpikeLow()
 {
-  motorRumble(2,0);
+  motorRumble(1,0);
   Serial.println("R_OFF");
 }
 
