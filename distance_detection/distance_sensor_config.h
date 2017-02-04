@@ -2,8 +2,8 @@
 #define DISTANCE_SENSOR_CONFIG_H
 
 #define SONAR_NUM     (2) // Number of sensors.
-#define MAX_DISTANCE  (90) // Maximum distance (in cm) to ping.
-#define PING_INTERVAL (40)  // Milliseconds between sensor pings (29ms is about the min to avoid cross-sensor echo).
+#define MAX_DISTANCE  (100) // Maximum distance (in cm) to ping.
+#define PING_INTERVAL (45)  // Milliseconds between sensor pings (29ms is about the min to avoid cross-sensor echo).
 
 #define CYCLE_PERIOD  (200)
 
@@ -12,7 +12,7 @@
 #define SENSOR_R_MAX_DIST 	(MAX_DISTANCE)
 
 #define HALF_THRESHOLD   (90)
-#define FULL_THRESHOLD   (30)
+#define FULL_THRESHOLD   (45)
 
 //pin definition
 #define SENSOR_L_TRIG 		(12)

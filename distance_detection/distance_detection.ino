@@ -22,8 +22,6 @@ uint8_t currentSensor = 0;          // Keeps track of which sensor is active.
 unsigned long interrupt_rising_edge;
 
 
-bool flip = 0;
-
 motor_modes_t current_mode = OFF_OFF;
 
 NewPing sonar[SONAR_NUM] = {     // Sensor object array.
@@ -49,7 +47,7 @@ void loop() {
 
       if (i == 0 && currentSensor == SONAR_NUM - 1)
       {
-        // oneSensorCycle(); // Sensor ping cycle complete, do something with the results.
+        oneSensorCycle(); // Sensor ping cycle complete, do something with the results.
 
         if (current_mode != distToMotorModeConversion(cm[0],cm[1]))
         {

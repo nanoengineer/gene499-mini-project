@@ -10,22 +10,23 @@
 // #define MOTOR_TEST
 
 //Motor rumble intensities
-#define RUMBLE_INTENSITY_HALF   (110)
-#define RUMBLE_INTENSITY_FULL   (200)
+#define RUMBLE_INTENSITY_HALF   (150)
+
+#define RUMBLE_INTENSITY_FULL   (160)
 
 #define NUM_OF_MOTORS            (2)
 
 //Motor Pulsing Timing Behaviour
-#define FULL_SPIKE_HIGH_BOUND   (1000) //in ms
-#define FULL_SPIKE_LOW_BOUND    (800)
+#define FULL_SPIKE_HIGH_BOUND   (900) //in ms
+#define FULL_SPIKE_LOW_BOUND    (400)
 
-#define FULL_OFF_HIGH_BOUND     (2000)
-#define FULL_OFF_LOW_BOUND      (1000)
+#define FULL_OFF_HIGH_BOUND     (1500)
+#define FULL_OFF_LOW_BOUND      (500)
 
 #define HALF_SPIKE_HIGH_BOUND   (700) //in ms
-#define HALF_SPIKE_LOW_BOUND    (400)
+#define HALF_SPIKE_LOW_BOUND    (300)
 
-#define HALF_OFF_HIGH_BOUND     (3000)
+#define HALF_OFF_HIGH_BOUND     (5000)
 #define HALF_OFF_LOW_BOUND      (2000)
 
 // #define LEFT_RIGHT_DELAY        (500)
