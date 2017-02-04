@@ -1,4 +1,4 @@
-# storm in a teacup
+# *storm in a teacup*
 
 GENE 499/FINE 392 Tech Art: Mini Project
 
